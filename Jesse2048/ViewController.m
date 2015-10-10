@@ -15,9 +15,9 @@
 
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet UIView *bgView;
+@property (weak, nonatomic) IBOutlet UIView *bgView;//放置按钮的view
 
-@property (nonatomic,strong) NSMutableArray *bgBtns;
+@property (nonatomic,strong) NSMutableArray *bgBtns;//背景按钮
 
 
 @end
@@ -67,49 +67,86 @@
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 }
 
-//up down swipe
+//up swipe
 - (void)swipeU:(UISwipeGestureRecognizer *)swipe
 {
     for (UIButton *btn in self.bgBtns) {
         if (btn.currentTitle != nil) {
             //获取到上一个button之后判断是否有title  有的话相加  没的话继续上移
-            [self moveBtnUp:btn];
+            [self moveBtn:btn X:0.f Y:-(marginY + btnHeight)];
+        }
+    }
+    //随机在title为空的button添加title
+    [self randomReduceBtn];
+}
+//down swipe
+- (void)swipeD:(UISwipeGestureRecognizer *)swipe
+{
+    for (UIButton *btn in self.bgBtns) {
+        if (btn.currentTitle != nil) {
+            //获取到下一个button之后判断是否有title  有的话相加  没的话继续下移
+            [self moveBtn:btn X:0.f Y:(marginY + btnHeight)];
+        }
+    }
+    //随机在title为空的button添加title
+    [self randomReduceBtn];
+}
+//left swipe
+- (void)swipeL:(UISwipeGestureRecognizer *)swipe
+{
+    for (UIButton *btn in self.bgBtns) {
+        if (btn.currentTitle != nil) {
+            //获取到左一个button之后判断是否有title  有的话相加  没的话继续左移
+            [self moveBtn:btn X:-(marginY + btnHeight) Y:0.f];
+        }
+    }
+    //随机在title为空的button添加title
+    [self randomReduceBtn];
+}
+//right swipe
+- (void)swipeR:(UISwipeGestureRecognizer *)swipe
+{
+    for (UIButton *btn in self.bgBtns) {
+        if (btn.currentTitle != nil) {
+            //获取到右一个button之后判断是否有title  有的话相加  没的话继续右移
+            [self moveBtn:btn X:(marginY + btnHeight) Y:0.f];
         }
     }
     //随机在title为空的button添加title
     [self randomReduceBtn];
 }
 //获取到上一个button之后判断是否有title  有的话相加  没的话继续上移
-- (void)moveBtnUp:(UIButton *)btn
+- (void)moveBtn:(UIButton *)btn X:(CGFloat)moveX Y:(CGFloat)moveY
 {
     CGPoint currentBtnPoint = btn.center;
-    CGPoint upBtnPoint = CGPointMake(currentBtnPoint.x, currentBtnPoint.y - (marginY + btnHeight));
+    CGPoint nextBtnPoint = CGPointMake(currentBtnPoint.x + moveX, currentBtnPoint.y + moveY);
     NSMutableArray *noTittleBtns = [NSMutableArray array];
-    for (UIButton *upBtn in self.bgBtns) {
+    for (UIButton *nextBtn in self.bgBtns) {
         //获取到上一个button
-        if (upBtnPoint.x == upBtn.center.x
-            && upBtnPoint.y == upBtn.center.y) {
+        if (nextBtnPoint.x == nextBtn.center.x
+            && nextBtnPoint.y == nextBtn.center.y) {
             //如果上面那个button跟下面的title一样的话相加
-            if ([upBtn.currentTitle isEqualToString:btn.currentTitle]) {
-                [upBtn setTitle:[NSString stringWithFormat:@"%d",[upBtn.currentTitle intValue] + [btn.currentTitle intValue]] forState:UIControlStateNormal];
+            if ([nextBtn.currentTitle isEqualToString:btn.currentTitle]) {
+                [nextBtn setTitle:[NSString stringWithFormat:@"%d",[nextBtn.currentTitle intValue] + [btn.currentTitle intValue]] forState:UIControlStateNormal];
                 [btn setTitle:nil forState:UIControlStateNormal];
+                return;
             }
             //下面这些执行完毕之后会得到一个最上面title为空的button
             //如果上面那个button的title为空的话
-            if (upBtn.currentTitle == nil) {
-                [noTittleBtns addObject:upBtn];
-                for (UIButton *up2Btn in self.bgBtns) {
-                    if (up2Btn.center.x == upBtn.center.x
-                        && up2Btn.center.y == upBtn.center.y - (marginY + btnHeight)) {
+            if (nextBtn.currentTitle == nil) {
+                [noTittleBtns addObject:nextBtn];
+                for (UIButton *next2Btn in self.bgBtns) {
+                    if (next2Btn.center.x == nextBtn.center.x + moveX
+                        && next2Btn.center.y == nextBtn.center.y + moveY) {
                         //如果上面上面那个button的title为空的话
-                        if (up2Btn.currentTitle == nil) {
-                            [noTittleBtns addObject:up2Btn];
-                            for (UIButton *up3Btn in self.bgBtns) {
-                                if (up3Btn.center.x == upBtn.center.x
-                                    && up3Btn.center.y == upBtn.center.y - 2 * (marginY + btnHeight)) {
+                        if (next2Btn.currentTitle == nil) {
+                            [noTittleBtns addObject:next2Btn];
+                            for (UIButton *next3Btn in self.bgBtns) {
+                                if (next3Btn.center.x == nextBtn.center.x + 2 * moveX
+                                    && next3Btn.center.y == nextBtn.center.y + 2 * moveY) {
                                     //如果上面上面上面那个button的title为空的话
-                                    if (up3Btn.currentTitle == nil) {
-                                        [noTittleBtns addObject:up3Btn];
+                                    if (next3Btn.currentTitle == nil) {
+                                        [noTittleBtns addObject:next3Btn];
                                     }
                                 }
                             }
@@ -117,13 +154,13 @@
                     }
                 }
                 //得到最上面为空的button之后，判断再上面还有button没，有的话判断相加
-                for (UIButton *upNoNullBtn in self.bgBtns) {
-                    UIButton *upestNullBtn = [noTittleBtns lastObject];
-                    if (upNoNullBtn.center.x == upestNullBtn.center.x
-                        && upNoNullBtn.center.y == upestNullBtn.center.y - (marginY + btnHeight)) {
+                for (UIButton *nextNoNullBtn in self.bgBtns) {
+                    UIButton *nextestNullBtn = [noTittleBtns lastObject];
+                    if (nextNoNullBtn.center.x == nextestNullBtn.center.x + moveX
+                        && nextNoNullBtn.center.y == nextestNullBtn.center.y + moveY) {
                         //如果相等，就相加
-                        if ([upNoNullBtn.currentTitle isEqualToString:btn.currentTitle]) {
-                            [upNoNullBtn setTitle:[NSString stringWithFormat:@"%d",[upNoNullBtn.currentTitle intValue] + [btn.currentTitle intValue]] forState:UIControlStateNormal];
+                        if ([nextNoNullBtn.currentTitle isEqualToString:btn.currentTitle]) {
+                            [nextNoNullBtn setTitle:[NSString stringWithFormat:@"%d",[nextNoNullBtn.currentTitle intValue] + [btn.currentTitle intValue]] forState:UIControlStateNormal];
                             [btn setTitle:nil forState:UIControlStateNormal];
                             return;
                         }
@@ -133,24 +170,11 @@
                 [[noTittleBtns lastObject] setTitle:[btn currentTitle] forState:UIControlStateNormal];
                 [[noTittleBtns lastObject] setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [btn setTitle:nil forState:UIControlStateNormal];
-
             }
         }
     }
 }
-- (void)swipeD:(UISwipeGestureRecognizer *)swipe
-{
-    
-}
-//left right swipe
-- (void)swipeL:(UISwipeGestureRecognizer *)swipe
-{
-    
-}
-- (void)swipeR:(UISwipeGestureRecognizer *)swipe
-{
-    
-}
+
 -(void)addBGLittleView
 {
     for (int i = 0; i < 16; i ++) {
