@@ -22,7 +22,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *currentScore;
 @property (weak, nonatomic) IBOutlet UILabel *highestScore;
 @property (nonatomic) int score;
-
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (nonatomic,strong) NSTimer *timer;
+@property (nonatomic) int beginTime;
 @end
 
 @implementation ViewController
@@ -36,7 +38,28 @@
     [self randomReduceBtn];
     //从本地读取出来保存的最高分数
     [self getHighestScore2Label];
+    //设置游戏时间
+    [self setGameTime];
 }
+- (void)setGameTime
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(setNeedsDisplay) userInfo:nil repeats:YES];
+}
+//每秒60帧的刷新本方法
+- (void)setNeedsDisplay
+{
+    self.beginTime ++;
+    self.timeLabel.text = [NSString stringWithFormat:@"%02d:%02d",self.beginTime / 60,self.beginTime % 60];
+}
+//重新设置计时器的label
+- (void)resetTimeLabel
+{
+    [self.timer invalidate];
+    self.timer = nil;
+    self.beginTime = 0;
+    [self setGameTime];
+}
+//从本地读取最高纪录
 - (void)getHighestScore2Label
 {
     id sign = [[NSUserDefaults standardUserDefaults] objectForKey:kHighestScore];
@@ -73,6 +96,9 @@
             [noTittleBtns addObject:btn];
         }
     }
+    if (noTittleBtns.count == 0) {
+        return;
+    }
     //随机在空title的数组中设置一个title
     int i = arc4random_uniform((int)noTittleBtns.count);
     UIButton *btn = noTittleBtns[i];
@@ -104,9 +130,10 @@
             [muarr addObject:btn];
         }
     }
-    if (muarr.count == 0) {
+    if (muarr.count == 0 && [self noSameTitle]) {
         //保存到本地
         [self saveHighestScore];
+        [self.timer invalidate];
         UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"很遗憾" message:@"游戏结束" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *aa = [UIAlertAction actionWithTitle:@"再来一局" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             //再来一局
@@ -121,10 +148,33 @@
             [self setScoreLabel];
             //随机生成一个button
             [self randomReduceBtn];
+            //重新设置计时器label
+            [self resetTimeLabel];
         }];
         [ac addAction:aa];
         [self presentViewController:ac animated:YES completion:nil];
     }
+}
+//判断是否还有相邻的title相同的按钮
+- (BOOL)noSameTitle
+{
+    for (UIButton *btn in self.bgBtns) {
+        CGPoint upBtn = CGPointMake(btn.center.x, btn.center.y - (marginY + btnHeight));
+        CGPoint leftBtn = CGPointMake(btn.center.x - (marginY + btnHeight), btn.center.y);
+        CGPoint downBtn = CGPointMake(btn.center.x, btn.center.y + (marginY + btnHeight));
+        CGPoint rightBtn = CGPointMake(btn.center.x + (marginY + btnHeight), btn.center.y);
+        for (UIButton *nextBtn in self.bgBtns) {
+            if ((nextBtn.center.x == upBtn.x && nextBtn.center.y == upBtn.y)
+                || (nextBtn.center.x == leftBtn.x && nextBtn.center.y == leftBtn.y)
+                || (nextBtn.center.x == downBtn.x && nextBtn.center.y == downBtn.y)
+                || (nextBtn.center.x == rightBtn.x && nextBtn.center.y == rightBtn.y)) {
+                if ([btn.currentTitle isEqualToString:nextBtn.currentTitle]) {
+                    return NO;
+                }
+            }
+        }
+    }
+    return YES;
 }
 //设置分数label
 - (void)setScoreLabel
@@ -157,9 +207,12 @@
 - (IBAction)restart:(UIButton *)sender {
     //保存到本地
     [self saveHighestScore];
+    [self.timer invalidate];
     UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"重新开始" message:@"小可爱你确定要重新开始嘛~ " preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *aa = [UIAlertAction actionWithTitle:@"确定开始" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         //再来一局
+        //重新设置计时器label
+        [self resetTimeLabel];
         for (UIButton *btn in self.bgView.subviews) {
             [btn removeFromSuperview];
         }
@@ -171,8 +224,11 @@
         [self setScoreLabel];
         //随机生成一个button
         [self randomReduceBtn];
+        
     }];
-    UIAlertAction *aaShare = [UIAlertAction actionWithTitle:@"并不" style:UIAlertActionStyleDefault handler:nil];
+    UIAlertAction *aaShare = [UIAlertAction actionWithTitle:@"并不" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self setGameTime];
+    }];
     [ac addAction:aa];
     [ac addAction:aaShare];
     [self presentViewController:ac animated:YES completion:nil];
@@ -181,11 +237,14 @@
 - (IBAction)bye:(UIButton *)sender {
     //保存到本地
     [self saveHighestScore];
-    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Are you sure ?" message:@"小可爱你确定要退出游戏嘛~ T_T" preferredStyle:UIAlertControllerStyleAlert];
+    [self.timer invalidate];
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"小可爱你确定要退出游戏嘛~ T_T ?" message:@"如有BUG,coder邮箱:jia_xin8@163.com" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *aa = [UIAlertAction actionWithTitle:@"确定退出" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         exit(0);
     }];
-    UIAlertAction *aaShare = [UIAlertAction actionWithTitle:@"继续玩~" style:UIAlertActionStyleDefault handler:nil];
+    UIAlertAction *aaShare = [UIAlertAction actionWithTitle:@"继续玩~" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self setGameTime];
+    }];
     [ac addAction:aa];
     [ac addAction:aaShare];
     [self presentViewController:ac animated:YES completion:nil];
@@ -210,7 +269,8 @@
 //down swipe
 - (void)swipeD:(UISwipeGestureRecognizer *)swipe
 {
-    for (UIButton *btn in self.bgBtns) {
+    NSArray *tempArr = [[self.bgBtns reverseObjectEnumerator] allObjects];
+    for (UIButton *btn in tempArr) {
         if (btn.currentTitle != nil) {
             //获取到下一个button之后判断是否有title  有的话相加  没的话继续下移
             [self moveBtn:btn X:0.f Y:(marginY + btnHeight)];
@@ -238,7 +298,8 @@
 //right swipe
 - (void)swipeR:(UISwipeGestureRecognizer *)swipe
 {
-    for (UIButton *btn in self.bgBtns) {
+    NSArray *tempArr = [[self.bgBtns reverseObjectEnumerator] allObjects];
+    for (UIButton *btn in tempArr) {
         if (btn.currentTitle != nil) {
             //获取到右一个button之后判断是否有title  有的话相加  没的话继续右移
             [self moveBtn:btn X:(marginY + btnHeight) Y:0.f];
