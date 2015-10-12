@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC5BA8241BCA98C100E1E8D4 /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CC5BA8231BCA98C100E1E8D4 /* music.mp3 */; };
+		CC5BA8271BCA9A8900E1E8D4 /* speaker_off_32.png in Resources */ = {isa = PBXBuildFile; fileRef = CC5BA8251BCA9A8900E1E8D4 /* speaker_off_32.png */; };
+		CC5BA8281BCA9A8900E1E8D4 /* speaker_silent_32.png in Resources */ = {isa = PBXBuildFile; fileRef = CC5BA8261BCA9A8900E1E8D4 /* speaker_silent_32.png */; };
 		CCE1FC6D1BC796030082E2B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE1FC6C1BC796030082E2B2 /* main.m */; };
 		CCE1FC701BC796030082E2B2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE1FC6F1BC796030082E2B2 /* AppDelegate.m */; };
 		CCE1FC731BC796030082E2B2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE1FC721BC796030082E2B2 /* ViewController.m */; };
@@ -27,6 +30,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC5BA8231BCA98C100E1E8D4 /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
+		CC5BA8251BCA9A8900E1E8D4 /* speaker_off_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_off_32.png; sourceTree = "<group>"; };
+		CC5BA8261BCA9A8900E1E8D4 /* speaker_silent_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker_silent_32.png; sourceTree = "<group>"; };
 		CCE1FC671BC796030082E2B2 /* Jesse2048.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jesse2048.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCE1FC6B1BC796030082E2B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCE1FC6C1BC796030082E2B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -96,6 +102,9 @@
 		CCE1FC6A1BC796030082E2B2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CC5BA8251BCA9A8900E1E8D4 /* speaker_off_32.png */,
+				CC5BA8261BCA9A8900E1E8D4 /* speaker_silent_32.png */,
+				CC5BA8231BCA98C100E1E8D4 /* music.mp3 */,
 				CCE1FC6B1BC796030082E2B2 /* Info.plist */,
 				CCE1FC6C1BC796030082E2B2 /* main.m */,
 			);
@@ -199,8 +208,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC5BA8241BCA98C100E1E8D4 /* music.mp3 in Resources */,
 				CCE1FC761BC796030082E2B2 /* Main.storyboard in Resources */,
 				CCE1FC7B1BC796030082E2B2 /* LaunchScreen.xib in Resources */,
+				CC5BA8281BCA9A8900E1E8D4 /* speaker_silent_32.png in Resources */,
+				CC5BA8271BCA9A8900E1E8D4 /* speaker_off_32.png in Resources */,
 				CCE1FC781BC796030082E2B2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +428,7 @@
 				CCE1FC8C1BC796040082E2B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CCE1FC8D1BC796040082E2B2 /* Build configuration list for PBXNativeTarget "Jesse2048Tests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +437,7 @@
 				CCE1FC8F1BC796040082E2B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -115,6 +115,27 @@
                                 <color key="textColor" red="0.998046875" green="0.6836400829" blue="0.61565736920000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AZV-kn-6JW">
+                                <rect key="frame" x="327" y="23" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="1EC-5X-M19"/>
+                                    <constraint firstAttribute="width" constant="32" id="xW6-dI-Kez"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <state key="normal" backgroundImage="speaker_silent_32.png">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="turnMusic:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="tcC-I1-CAX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.98536787983653684" green="1" blue="0.92438498590433338" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -133,10 +154,12 @@
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="jKi-J0-5xR" secondAttribute="bottom" constant="13" id="Pnc-0t-QEx"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="W0K-LM-yey" secondAttribute="bottom" constant="11" id="Rdg-Er-Xzr"/>
                             <constraint firstItem="W0K-LM-yey" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="ZpV-Sw-1Gi"/>
+                            <constraint firstItem="AZV-kn-6JW" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="3" id="aZa-NH-ytV"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Xx6-il-uhE" secondAttribute="bottom" constant="19" id="enE-YM-hRI"/>
                             <constraint firstItem="pVR-3T-wd8" firstAttribute="leading" secondItem="nif-1p-ZUh" secondAttribute="trailing" constant="6" id="gPY-mz-waP"/>
                             <constraint firstItem="5Mi-C7-QNm" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="jci-kZ-7bs"/>
                             <constraint firstItem="5Mi-C7-QNm" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="plI-M3-Bwh"/>
+                            <constraint firstAttribute="trailing" secondItem="AZV-kn-6JW" secondAttribute="trailing" constant="16" id="sg3-gr-W7R"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -145,6 +168,7 @@
                         <outlet property="currentScore" destination="WYa-OP-DuH" id="uJr-dz-zC0"/>
                         <outlet property="highestScore" destination="pVR-3T-wd8" id="g27-Yf-W9c"/>
                         <outlet property="timeLabel" destination="Xx6-il-uhE" id="cgJ-7R-sQ0"/>
+                        <outlet property="turnMusic" destination="AZV-kn-6JW" id="Vad-BU-Mpw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -152,4 +176,7 @@
             <point key="canvasLocation" x="304.5" y="417.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="speaker_silent_32.png" width="32" height="32"/>
+    </resources>
 </document>

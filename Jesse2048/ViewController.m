@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-
+#import <AVFoundation/AVFoundation.h>
 #define marginX     10.f
 #define marginY     10.f
 #define btnWidth    0.25 * ([UIScreen mainScreen].bounds.size.width - (5 * marginX))
@@ -25,6 +25,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (nonatomic,strong) NSTimer *timer;
 @property (nonatomic) int beginTime;
+
+@property (nonatomic,strong) AVAudioPlayer *player;
+@property (weak, nonatomic) IBOutlet UIButton *turnMusic;
 @end
 
 @implementation ViewController
@@ -40,6 +43,30 @@
     [self getHighestScore2Label];
     //设置游戏时间
     [self setGameTime];
+    //设置背景音乐
+    [self setBGMusic];
+}
+- (void)setBGMusic
+{
+    NSError *error;
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:[[NSBundle mainBundle] pathForResource:@"music" ofType:@"mp3"]] error:&error];
+    if (error) {
+        NSLog(@"%@",error);
+    }
+    self.player.numberOfLoops = -1;
+    [self.player prepareToPlay];
+    [self.player play];
+}
+- (IBAction)turnMusic:(UIButton *)sender {
+    if (self.turnMusic.selected) {
+        [self.turnMusic setBackgroundImage:[UIImage imageNamed:@"speaker_silent_32"] forState:UIControlStateNormal];
+        self.turnMusic.selected = NO;
+        [self.player play];
+    }else{
+        [self.turnMusic setBackgroundImage:[UIImage imageNamed:@"speaker_off_32"] forState:UIControlStateNormal];
+        self.turnMusic.selected = YES;
+        [self.player stop];
+    }
 }
 - (void)setGameTime
 {
